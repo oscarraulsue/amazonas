@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { makeStyles} from '@material-ui/core';
 import { RecaptchaVerifier } from '@firebase/auth';
-import Map from './Maps';
+
 
 export const Zoom = () => {
     // const classes = useStyles();
@@ -127,10 +127,7 @@ let radio = 3;
                 <div className="zoom" id="zoom">
                 </div>
             </div>
-            <Map 
 
-   loadingElement= {<p>Cargando...</p>}
-  />
         </div>
     )
 }

@@ -59,6 +59,8 @@ Form{
     opacity: 1;
     
 }
+
+
 .picture img{
     width:100%;
     height: 100%;
@@ -83,15 +85,15 @@ Form{
 }
 .zoom {
     opacity: 0;
-    position: relative;
+    position: absolute;
     top: 100px;
-    left: 20px;
+    left: 40rem;
     margin-left: 0px;
     background-size: 2000px 2000px;
     width: 340px;
     height: 340px;
     background-repeat: no-repeat;
-    background-image: url('https://m.media-amazon.com/images/G/01/img18/home/2021/Gift_List_Registry/gift/custom_gift_238x238.jpg');
+
 }
 
 .map{

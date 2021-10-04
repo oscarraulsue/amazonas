@@ -6,7 +6,7 @@
  }
 
 
- export const typesStudent = {
+ export const typesProducto = {
      register: 'register',
      list: 'list',
      delete: 'delete'

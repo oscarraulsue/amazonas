@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Maps from './Maps';
 import GoogleMapReact from 'google-map-react';
 
 
@@ -65,7 +64,7 @@ function MapView(props) {
         <p>Latitude: {posicion.center.lat}</p>
         <p>longitude: {posicion.center.lng}</p>
         <div >
-        <div style={{ height: '50vh', width: '50vh' }}>
+        <div style={{ height: '150vh', width: '150vh' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key:"AIzaSyAVJ8ohZk2QG-3vHyrUMTwih-e87uRrcGU" }}
           defaultCenter={posicion.center}

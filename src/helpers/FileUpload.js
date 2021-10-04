@@ -1,6 +1,6 @@
 export const fileUpload = async (file) =>{
 
-    const cloudUrl = ' https://api.cloudinary.com/v1_1/dky22nhv5/upload';
+    const cloudUrl = 'https://api.cloudinary.com/v1_1/dky22nhv5/upload';
     const formData = new FormData();
     formData.append('upload_preset','clauOscar');
     formData.append('file',file);
