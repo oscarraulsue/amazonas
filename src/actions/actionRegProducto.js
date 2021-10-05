@@ -1,30 +1,35 @@
-import { types, typesProducto } from "../types/types";
+import { typesProducto } from "../types/types";
 import { db } from "../firebase/firebaseConfig";
-import { addDoc,collection,deleteDoc,getDocs, query,where,doc } from "@firebase/firestore";
+import { addDoc, updateDoc,collection,deleteDoc,getDocs, doc } from "@firebase/firestore";
+import Swal from 'sweetalert2'
 
+let id = ""
 //Eliminar
-export const deleteProducto = (nombre) =>{
+export const deleteProducto = (id) =>{
     return async(dispatch) => {
 
-        const proCollection = collection(db,"productos");
-        const q = query(proCollection,where("nombre","==",nombre))
-       
-        const datos = await getDocs(q);
-        datos.forEach((docu) => {
-            deleteDoc(doc(db,"productos",docu.id));
+       deleteDoc(doc(db,"productos",id));
+         dispatch(deleteSincrono(id));
+         Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Registro Eliminado',
+            showConfirmButton: false,
+            timer: 1500
         })
-        dispatch(deleteSincrono(nombre));
     }
 }
 
-export const deleteSincrono = (nombre) => {
+export const deleteSincrono = (id) => {
     return{
         type: typesProducto.delete,
-        payload: nombre
+        payload: id
     }
 }
 
 export const registerProducto = (nom,precio,detPre,color,detProducto,img) => {
+    
+    console.log(id)
    return( dispatch) => {
        const newProducto = {
            nom,
@@ -33,10 +38,12 @@ export const registerProducto = (nom,precio,detPre,color,detProducto,img) => {
            color,
            detProducto,
            img
+          
        }
        addDoc(collection(db,"productos"),newProducto)
        .then(resp => {
            dispatch(registerProductoSincrono(newProducto))
+           Swal.fire('Registro Guardado', 'success');
        })
        .catch(error => {
            console.log(error);
@@ -59,8 +66,11 @@ export const listProducto = () => {
         const querySnapshot = await getDocs(collection(db, "productos"));
         const producto = [];
         querySnapshot.forEach((doc) => {
+            console.log(doc.id)
             producto.push({
-                ...doc.data()
+                
+                ...doc.data(id),
+                id:doc.id
             })
         });
         dispatch(list(producto));
@@ -74,3 +84,29 @@ export const list = (productos) => {
     }
 }
 
+export const editar = (nom,precio,detPre,color,detProducto,id) => {
+    return async () => {
+        console.log("action")
+        console.log(nom,precio,detPre,color,detProducto,id)
+        const docRef = await doc(db,"productos", id);
+        console.log(docRef)
+        // Update the timestamp field with the value from the server
+         await updateDoc(docRef, {
+            nom,
+            precio,
+            detPre,
+            color,
+            detProducto,
+        });
+
+        Swal.fire('Registro Guardado', 'success');
+        
+    }
+}
+export const editSincrono = (producto) => {
+    return{
+        type: typesProducto.register,
+        payload: producto
+    }
+
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {Puff} from 'react-loading-icons'
 import {
   BrowserRouter as Router,
   Switch
@@ -11,7 +12,8 @@ import { PublicRoute } from "./PublicRoute";
 import {useDispatch} from 'react-redux';
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
 import { loginEmailPassword } from "../actions/actionLogin";
-
+import Navbar from "../components/Navbar";
+import App from "../components/App";
 export default function AppRouter() {
 
 const dispatch = useDispatch();
@@ -34,22 +36,33 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   if(checking){
     return(
-      <h1>Espere...</h1>
+      <div style={{display: 'flex', margin:"15rem 30rem",}}>
+      <Puff stroke="#98ff98" strokeOpacity={.125} speed={.75} />
+       <h1>Cargando....</h1>
+         
+</div>
     )
   }
 
   return (
     <Router>
       <div>
+      <Navbar />   
         <Switch>
-
+        <PublicRoute
+            exact
+            path="/"
+            component={App} 
+            isAuthenticated={ isLoggedIn }
+            />
+            
           <PublicRoute
             exact
             path="/login"
             component={Login}
             isAuthenticated={ isLoggedIn }
           />
-
+ 
           <PublicRoute
             exact
             path="/registro"
@@ -58,7 +71,7 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
             />
 
           <PrivateRoute
-            path="/"
+            path="/auth"
             component={DashboardRouter}
            isAuthenticated={ isLoggedIn }
           />

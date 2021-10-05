@@ -1,19 +1,16 @@
 import React, {useEffect, useState} from 'react'
-import { makeStyles} from '@material-ui/core';
-import { RecaptchaVerifier } from '@firebase/auth';
-import Navbar from './Navbar';
+import {Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
 
 
 export const Detalle = (data) => {
-    // const classes = useStyles();
 
-    console.log(data)
     let imagen = data.history.location.data.element
     let imag = imagen.img
     let imgInit = imag[0];
     const [selecImg, setSelecImg] = useState(imgInit.response)
     const [picture, setPicture] = useState("")
-    const [picture0, setPicture0] = useState("")
     const [scrolly, setScrolly] = useState("")
     const [zoom, setZoom] = useState("")
     const [rect, setRect] = useState("")
@@ -22,7 +19,6 @@ export const Detalle = (data) => {
 useEffect(() => {
     
      setPicture(document.querySelector('#pictures'))
-     setPicture0(document.querySelector('#picture'))
      setRect(document.querySelector('#rect'))
      setZoom(document.querySelector('#zoom'))
      if(zoom){
@@ -33,31 +29,16 @@ useEffect(() => {
         
       };
 
-}, [zoom])
-
-
-// if(picActive === 1){
-//     document.querySelector(`#${picActive}`)
-//  }
-    
+    },[zoom])
 
     const changeImg = (imgSrc) => {
       
      setSelecImg(imgSrc)
     zoom.style.backgroundImage = "url(" + imgSrc + ")";
-
 }
-
 let w1 = picture.offsetWidth;
 let x, y, xx, yy;
 
-
-
-let w2 = picture0.offsetWidth;
-let h2 = picture0.offsetHeight;
-
-let w3 = rect.offsetWidth;
-let h3 = rect.offsetHeight;
 const move = (e) => {
 
     xx = (x-144) * 4.8;
@@ -92,14 +73,13 @@ const move = (e) => {
     zoom.style.backgroundPosition = "-" + xx + "px -" + yy + "px";
 }
 
-let radio = 3;
+
 
 
 
 
     return (
         <>
-        <Navbar/>
         <div className="contgrid">
               <div className="container" style={{marginRight:"-70px"}}>
             <div className="pictures" id="pictures">
@@ -131,6 +111,19 @@ let radio = 3;
                 <div className="rect" id ="rect" ></div>
                
                 <div className="zoom" id="zoom"></div>
+                <Link
+                to ={{
+                 pathname:"/auth/editar",
+                 dataPro: {imagen}
+                }}
+                >
+                <Button
+                style={{ marginLeft:"150px",width:"330px", height:"50px"  }}
+                 variant="success"
+                 type="button">
+                    Editar Registro
+                </Button>
+                </Link>
                 </div>
                 <div className="detalleProducto" style={{marginRight:"60px"}}>
                     <p style={{fontWeight:"bold", fontSize:"22px"}}>{imagen.nom}</p>

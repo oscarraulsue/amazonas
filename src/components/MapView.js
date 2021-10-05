@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import GoogleMapReact from 'google-map-react';
 
 
 
 function MapView(props) {
-    const defaultProps = {
-        center: {
-          lat: 4.579524,
-          lng: -74.1574289
-        },
-        zoom: 15
-      };
-    const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
           const [posicion, setPosicion] = useState({
             center: {
@@ -59,12 +51,9 @@ function MapView(props) {
     }
 
     return (
-        <>
-        <h1>Geolocation</h1>
-        <p>Latitude: {posicion.center.lat}</p>
-        <p>longitude: {posicion.center.lng}</p>
+      
         <div >
-        <div style={{ height: '150vh', width: '150vh' }}>
+        <div style={{ height: '70vh', width: '130vh', display: 'flex', margin: "5rem auto", border:"5px solid" }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key:"AIzaSyAVJ8ohZk2QG-3vHyrUMTwih-e87uRrcGU" }}
           defaultCenter={posicion.center}
@@ -77,7 +66,7 @@ function MapView(props) {
         </GoogleMapReact>
       </div>
  </div>
- </>
+
     )
 }
 

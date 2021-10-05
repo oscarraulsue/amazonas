@@ -9,10 +9,10 @@ export const Registro = ({history}) => {
     const dispatch = useDispatch();
 
     const [formValues, handleInputChange] = useForm({
-        nombre: 'Jenny',
-        email: 'jenny@gmail.com',
-        pass1: '123456',
-        pass2: '123456'
+        nombre: '',
+        email: '',
+        pass1: '',
+        pass2: ''
     });
 
     const { nombre, email, pass1, pass2 } = formValues;
@@ -74,7 +74,7 @@ export const Registro = ({history}) => {
                     Registrarse
                 </Button>
 
-                <Link to="/">Login</Link>
+                <Link to="/login">Login</Link>
 
             </Form>
 

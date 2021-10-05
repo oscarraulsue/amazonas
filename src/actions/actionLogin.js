@@ -1,6 +1,6 @@
 import {types} from '../types/types';
-import {  getAuth, signInWithPopup,signInWithEmailAndPassword,signOut  } from "firebase/auth";
-import { google } from '../firebase/firebaseConfig';
+import {  getAuth, FacebookAuthProvider, signInWithPopup,signInWithEmailAndPassword,signOut  } from "firebase/auth";
+import { facebook, google } from "../firebase/firebaseConfig";
 
 export const loginEmailPassword = (email,password) =>{
     
@@ -17,8 +17,8 @@ export const loginEmailPassword = (email,password) =>{
 
        })
        .catch(e =>{
-           //console.log(e);
-            //console.log('El usuario no existe');
+           console.log(e);
+            console.log('El usuario no existe');
        })
     }
 }
@@ -30,6 +30,20 @@ export const loginGoogle = () => {
         signInWithPopup(auth,google)
         .then(({user}) => {
             dispatch(loginSincrono(user.uid,user.displayName))
+        })
+        .catch(e =>{
+            console.log(e);
+        })
+    }
+}
+export const loginFacebook = () => {
+
+    return(dispatch) => {
+    const auth = getAuth();
+       
+        signInWithPopup(auth,facebook)
+        .then(({user}) => {
+          dispatch(loginSincrono(user.uid,user.displayName))
         })
         .catch(e =>{
             console.log(e);
@@ -52,16 +66,11 @@ export const loginSincrono = (id, displayname) => {
 //logout
 
 export const logout = () => {
-
-     return(dispatch) => {
+     return async(dispatch) => {
          const auth = getAuth();
-         signOut(auth)
-         .then(user => {
-             dispatch(logoutSincrono())
-         })
-         .catch(error => {
-             console.log(error);
-         })
+             await signOut(auth);
+             dispatch(logoutSincrono());
+
      }
 }
 

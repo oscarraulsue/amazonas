@@ -1,207 +1,170 @@
-import { AppBar, List , makeStyles,Drawer,Toolbar, IconButton, Divider } from '@material-ui/core';
-import React from 'react'
-import {Link, animateScroll as scroll} from "react-scroll"
-import PermIdentityTwoToneIcon from '@material-ui/icons/PermIdentityTwoTone';
-import EmojiObjectsTwoToneIcon from '@material-ui/icons/EmojiObjectsTwoTone';
-import WorkTwoToneIcon from '@material-ui/icons/WorkTwoTone';
-import InsertCommentTwoToneIcon from '@material-ui/icons/InsertCommentTwoTone';
+import { List, makeStyles, Drawer, Toolbar, IconButton, Divider } from '@material-ui/core';
+import React, { useEffect, useRef } from 'react'
 import MenuTwoToneIcon from '@material-ui/icons/MenuTwoTone';
-import {useState} from "react"
+import { useState } from "react"
 import CancelIcon from '@material-ui/icons/Cancel';
-import { Estudiantes } from './RegProducto';
+import { useDispatch } from 'react-redux';
+import { busquedaActiva } from '../actions/actionBuscar';
+import { Link } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from '@firebase/auth';
+import { logout } from '../actions/actionLogin';
 
 
-
-const Navbar = () => {
+const Navbar = ({history}) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
+    const [search, setSearch] = useState('')
+    const searchref = useRef()
+    const dispatch = useDispatch();
+
+
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+    useEffect(() => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user?.uid) {
+                setIsLoggedIn(true);
+            } else {
+                setIsLoggedIn(false);
+            }
+
+        });
+    }, [setIsLoggedIn])
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        let q = { search }
+        dispatch(busquedaActiva(q.search))
+    }
+    const handleLogout = () => {
+        history.replace('/');
+    }
+    const handleInputChange = (e,) => {
+        setSearch(e.target.value)
+    }
     return (
         <>
-        
-         
-         <Toolbar className={classes.toolbar}>
-         <div>
-         <a href= "about">
-          <img src="" className={classes.logo} alt= "Logo"/>
-         </a>
-         <a href= "about">
-          <img src="https://res.cloudinary.com/dky22nhv5/image/upload/v1632679406/facebook_gqfii0.png" className={classes.logo} alt= "Logo"/>
-         </a>
-         <a href= "about">
-          <img src="https://res.cloudinary.com/dky22nhv5/image/upload/v1632679407/inst_yc3kha.png" className={classes.logo} alt= "Logo"/>
-         </a>
-         <a href= "about">
-          <img src="https://res.cloudinary.com/dky22nhv5/image/upload/v1632679408/tw_ohxaz4.png" className={classes.logo} alt= "Logo"/>
-         </a>
-         </div>
-         <List edge="end" className={classes.list}>
-
-                <label 
-                className={classes.labelMenu}
-                >Menu
-                <ul>
-								<li><a href="">Submenu1</a></li>
-								<li><a href="">Submenu2</a></li>
-								<li><a href="">Submenu3</a></li>
-								<li><a href="">Submenu4</a></li>
-							</ul>
-                </label>
 
 
-                <Link 
-                 to ="/atencionmedica"
-                 spy ={true} 
-                 smooth={true} 
-                 duration={500}
-                  offset={-64}>Tienda</Link>
-      
-                <Link 
-                 to ="/atencionmedica"
-                 spy ={true} 
-                 smooth={true} 
-                 duration={500}
-                  offset={-64}>Contacto</Link>
+            <Toolbar className={classes.toolbar}>
 
-                <Link 
-                 to ="/"
-                 spy ={true} 
-                 smooth={true} 
-                 duration={500}
-                  offset={-64}>Blog</Link>
-              <Link 
-                 to ="/" 
-                 spy ={true} 
-                 smooth={true} 
-                 duration={500}
-                 offset={-64}>Iniciar sesión</Link>
-         </List>
-         <IconButton edge="end" className={classes.listbottom} onClick={()=>setOpen(true)}>
-        <MenuTwoToneIcon fontSize = "large" />
-        </IconButton>
-         </Toolbar>
-         
-          <Drawer anchor="right" open={open} onClose={()=>setOpen(false)} className={classes.menul}>
-          <IconButton onClick={()=>setOpen(false)} className={classes.close}>
-          <CancelIcon fontSize="large"  />
-          </IconButton>
-          <Divider />
-  
-          <Link 
-                 to ="/"
-                 spy ={true} 
-                 ActiveClass = 'active' 
-                 smooth={true} 
-                 duration={500}
-                  offset={-64}>Menu</Link>
+                <Link to="/">
+                    <img src="https://res.cloudinary.com/dky22nhv5/image/upload/v1633400651/logo_echeqy.png" className={classes.logo} alt="Logo" />
+                </Link>
 
-                <Link 
-                 to ="/atencionmedica"
-                 spy ={true} 
-                 ActiveClass = 'active' 
-                 smooth={true} 
-                 duration={500}
-                  offset={-64}>Tienda</Link>
-      
-                <Link 
-                 to ="/atencionmedica"
-                 spy ={true} 
-                 ActiveClass = 'active' 
-                 smooth={true} 
-                 duration={500}
-                  offset={-64}>Contacto</Link>
+                <List edge="end" className={classes.list}>
 
-                <Link 
-                 to ="/"
-                 spy ={true} 
-                 ActiveClass = 'active' 
-                 smooth={true} 
-                 duration={500}
-                  offset={-64}>Blog</Link>
-                <Link 
-                 to ="/" 
-                 spy ={true} 
-                 ActiveClass = 'active' 
-                 smooth={true} 
-                 duration={500}
-                 offset={-64}>Iniciar sesión</Link>
- 
-          </Drawer> 
+                    <Link
+                        to="/auth/map"
+                        spy={true}
+                        smooth={true}
+                    >Elige tu dirección</Link>
 
-         
-        </>  
+
+                    <form
+                        onSubmit={handleSubmit}>
+                        <input
+                            name="search"
+                            ref={searchref}
+                            placeholder="Buscar"
+                            value={search}
+                            onChange={handleInputChange}
+                            className={classes.inBusca}
+                            style={{ width: "500px", marginLeft: "-840px" }}
+                        />
+
+                    </form>
+                    <div style={{ width: "200px", marginLeft: "-320px" }}>
+                        {
+                            isLoggedIn
+                                ?
+                                <Link
+                                    onClick={() => { dispatch(logout()) }}
+                                    to="/"
+                                    spy={true}
+                                    smooth={true}
+                                >Cerrar sesión</Link>
+                                :
+                                <Link
+                                    to="/login"
+                                    spy={true}
+                                    smooth={true}
+                                >Iniciar sesión</Link>
+
+                        }
+                    </div>
+
+                </List>
+                <IconButton edge="end" className={classes.listbottom} onClick={() => setOpen(true)}>
+                    <MenuTwoToneIcon fontSize="large" />
+                </IconButton>
+            </Toolbar>
+
+            <Drawer anchor="right" open={open} onClose={() => setOpen(false)} className={classes.menul}>
+                <IconButton onClick={() => setOpen(false)} className={classes.close}>
+                    <CancelIcon fontSize="large" />
+                </IconButton>
+                <Divider />
+
+                <Link
+                    to="/atencionmedica"
+                    spy={true}
+                    smooth={true}
+                    duration={500}
+                    offset={-64}>Elige tu dirección</Link>
+
+                <Link
+                    to="/"
+                    spy={true}
+                    smooth={true}
+                    duration={500}
+                    offset={-64}>{isLoggedIn}</Link>
+
+            </Drawer>
+
+
+        </>
     )
 }
 
 
-const useStyles = makeStyles((theme) =>({
-    labelMenu:{
-        backgroundColor:"#000",
-        color:"#fff",
-        textDecoration:"none",
-        padding:"10px 12px",
-        display:"block",
-        "&:hover":{
-            "& ul":{
-				display:"block"
+const useStyles = makeStyles((theme) => ({
 
-        }
-    },
-        "& ul":{
-            
-				display:"none",
-				position:"absolute",
-				minWidth:"140px",
-                backgroundColor:"#000",
-                color:"#fff",
-                textDecoration:"none",
-                padding:"10px 12px",
-               
-        },
-        "& li":{
-            minWidth:"140px",
-            backgroundColor:"#000",
-            color:"#fff",
-            textDecoration:"none",
-            padding:"10px 12px",
-           
-    }
-    },
-
-    root:{
-        backgroundColor: "#FFFF",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-    },
     toolbar: {
         display: "flex",
-        backgroundColor:"#002",
-    
-        "& img":{
+        alignItems: "center",
+        backgroundColor: "#000",
+        marginBottom: "2rem",
+        "& img": {
             height: '3rem',
             width: "8rem",
         }
     },
-    Logo:{
-         objectFit: "contain",
-        "&:hover":{
-            cursor:'pointer',
+    Logo: {
+        objectFit: "contain",
+        "&:hover": {
+            cursor: 'pointer',
         }
     },
     list: {
-       alignItems: "right",
-       display:"flex",
-       margin: "auto",
-       marginRight:"0", 
+        alignItems: "center",
+        display: "flex",
+        margin: "auto 50px",
+
+        color: "#fff",
+
         [theme.breakpoints.down("sm")]: {
-            display:"none"
+            // display:"none"
         },
-        "& a":{
+        "& a": {
             color: "#fff",
-            fontSize: "1.4rem",
+            fontSize: "1rem",
             fontWeight: 'bold',
-            marginLeft: theme.spacing(3)
+            margin: " auto 10px",
+            width: "59rem",
+            textDecoration: "none"
         },
         "& a:hover": {
             cursor: "pointer",
@@ -222,34 +185,34 @@ const useStyles = makeStyles((theme) =>({
             right: 10,
         }
     },
-    menul2:{
+    menul2: {
         color: "blue",
         width: "30vw",
         [theme.breakpoints.down("sm")]: {
             width: "60vw",
         },
     },
-    menul:{
+    menul: {
 
-        "& a":{
-            margin: theme.spacing(5,0,0,4),
+        "& a": {
+            margin: theme.spacing(5, 0, 0, 4),
             fontSize: "1.4rem",
             color: "#333",
             fontWeight: "bold",
         },
-        "& a:hover":{
+        "& a:hover": {
             color: "tomato",
             cursor: "pointer",
         }
 
     },
-    close:{
+    close: {
         color: "red",
         position: "absolute",
         top: 0,
-        right:10,
+        right: 10,
     }
-  }))
+}))
 
 export default Navbar
 

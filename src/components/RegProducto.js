@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
-// import { logout } from '../actions/actionLogin';
 import { fileUpload } from '../helpers/FileUpload';
 import { registerProducto } from '../actions/actionRegProducto';
 import { Form, Button } from 'react-bootstrap';
@@ -8,11 +7,16 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 
-export const RegProducto = ({ history }) => {
+export const RegProducto = () => {
+  
+    
+  
     const [imagen, setImagen] = useState([])
     const [imagenText, setImagenText] = useState("Agregar Imagen")
     const dispatch = useDispatch();
-    let imagen2 = ""
+    let imagen2 = "";
+
+
     const formik = useFormik({
         initialValues: {
            nombre: "",
@@ -40,7 +44,7 @@ export const RegProducto = ({ history }) => {
    
      })
      const handleRegistro = (data ) => {
-  
+      
         dispatch(registerProducto(data.nombre, data.precio, data.detallePrecio, data.color, data.detalleProducto,imagen))
         setImagen([])
         document.getElementById('image').innerHTML =""
