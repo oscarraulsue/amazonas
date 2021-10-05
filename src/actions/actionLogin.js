@@ -1,5 +1,5 @@
 import {types} from '../types/types';
-import {  getAuth, FacebookAuthProvider, signInWithPopup,signInWithEmailAndPassword,signOut  } from "firebase/auth";
+import {  getAuth, signInWithPopup,signInWithEmailAndPassword,signOut  } from "firebase/auth";
 import { facebook, google } from "../firebase/firebaseConfig";
 
 export const loginEmailPassword = (email,password) =>{
@@ -13,7 +13,7 @@ export const loginEmailPassword = (email,password) =>{
              dispatch(
                 loginSincrono(user.uid,user.displayName)
              ) 
-             //console.log('Bienvenid@');
+         
 
        })
        .catch(e =>{

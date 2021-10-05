@@ -1,36 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import GoogleMapReact from 'google-map-react';
+import {Button } from 'react-bootstrap';
 
 
+function MapView(posicion1) {
+  let posicionIni = "";
+        posicion1.history.location.posicion1 ?
+        posicionIni = posicion1.history.location.posicion1
+          :
+          posicionIni = { center: {
+            lat:0,
+            lng:0,
+          },
+          zoom: 0
+        }
+          const [posicion, setPosicion] = useState(posicionIni);
+            useEffect(() => {
+              posAct()
+            }, [])
 
-function MapView(props) {
-
-          const [posicion, setPosicion] = useState({
-            center: {
-              lat:0,
-              lng: 0
-            },
-            zoom: 0
-          });
-
-     navigator.geolocation.getCurrentPosition(
-        function (position) {
-          setPosicion({
-            center: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            },
-            zoom: 15
-          });
-        },
-        function (error) {
-          console.error("Error Code = " + error.code + " - " + error.message);
-        },
-        {
-          enableHighAccuracy: true,
-         }
-         );
-      console.log(posicion)
+            const posAct = () => {          
+            navigator.geolocation.getCurrentPosition(
+              function (position) {
+                setPosicion({
+                  center: {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                  },
+                  zoom: 15
+                });
+              },
+              function (error) {
+                console.error("Error Code = " + error.code + " - " + error.message);
+              },
+              {
+                enableHighAccuracy: true,
+               }
+               );
+              }
     const  _onClick = ({x, y, lat, lng, event}) => {
       
       console.log(x, y, lat, lng, event)
@@ -65,6 +72,13 @@ function MapView(props) {
         <Marker lat={posicion.center.lat} lng={posicion.center.lng} />    
         </GoogleMapReact>
       </div>
+      <Button
+      onClick={posAct}
+                style={{ marginLeft:"480px",width:"330px", height:"50px"  }}
+                 variant="success"
+                 type="button">
+                    Editar Registro
+                </Button>
  </div>
 
     )

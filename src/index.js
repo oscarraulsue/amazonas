@@ -5,8 +5,7 @@ import './styles/styleProductos.css';
 import {RegistroApp} from './RegistroApp';
 import {Provider} from 'react-redux';
 import {store} from './store/store';
-import App from './components/App';
-import { Zoom } from './components/Zoom';
+
 
 
 ReactDOM.render(

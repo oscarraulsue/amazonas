@@ -16,9 +16,32 @@ const Navbar = ({history}) => {
     const [search, setSearch] = useState('')
     const searchref = useRef()
     const dispatch = useDispatch();
-
-
     const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const [posicion, setPosicion] = useState({
+        center: {
+          lat:0,
+          lng: 0
+        },
+        zoom: 0
+      });
+      
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
+          setPosicion({
+            center: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            },
+            zoom: 15
+          });
+        },
+        function (error) {
+          console.error("Error Code = " + error.code + " - " + error.message);
+        },
+        {
+          enableHighAccuracy: true,
+         }
+         );
 
     useEffect(() => {
         const auth = getAuth();
@@ -38,9 +61,7 @@ const Navbar = ({history}) => {
         let q = { search }
         dispatch(busquedaActiva(q.search))
     }
-    const handleLogout = () => {
-        history.replace('/');
-    }
+ 
     const handleInputChange = (e,) => {
         setSearch(e.target.value)
     }
@@ -57,7 +78,10 @@ const Navbar = ({history}) => {
                 <List edge="end" className={classes.list}>
 
                     <Link
-                        to="/auth/map"
+                        to={{
+                            pathname: "/auth/map",
+                            posicion1: posicion
+                        }}
                         spy={true}
                         smooth={true}
                     >Elige tu dirección</Link>
@@ -72,11 +96,11 @@ const Navbar = ({history}) => {
                             value={search}
                             onChange={handleInputChange}
                             className={classes.inBusca}
-                            style={{ width: "500px", marginLeft: "-840px" }}
+                            style={{ width: "500px", marginLeft: "-1120px" }}
                         />
 
                     </form>
-                    <div style={{ width: "200px", marginLeft: "-320px" }}>
+                    <div style={{ width: "200px", marginLeft: "-600px" }}>
                         {
                             isLoggedIn
                                 ?
@@ -92,10 +116,16 @@ const Navbar = ({history}) => {
                                     spy={true}
                                     smooth={true}
                                 >Iniciar sesión</Link>
+                                
 
                         }
+                     
                     </div>
-
+                    <Link
+                                    to="/auth/regproducto"
+                                    spy={true}
+                                    smooth={true}
+                                >Agregar Producto</Link>
                 </List>
                 <IconButton edge="end" className={classes.listbottom} onClick={() => setOpen(true)}>
                     <MenuTwoToneIcon fontSize="large" />
@@ -135,7 +165,7 @@ const useStyles = makeStyles((theme) => ({
     toolbar: {
         display: "flex",
         alignItems: "center",
-        backgroundColor: "#000",
+        backgroundColor: "#131921",
         marginBottom: "2rem",
         "& img": {
             height: '3rem',
